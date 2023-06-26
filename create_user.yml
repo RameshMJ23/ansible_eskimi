@@ -1,0 +1,26 @@
+---
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: create new user
+    tags: always
+    user:
+      name: autouser1
+      groups: root
+
+  - name: add ssh key for new user
+    tags: always
+    authorized_key: 
+      user: autouser1
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGAHC81M0+dfnq2t5YCDtSDuVONMi6UVrs99pG8qf2uo ansible"
+
+  - name: add sudoers file for new user
+    tags: always
+    copy:
+      src: sudoer_autouser1
+      dest: /etc/sudoers.d/autouser1
+      owner: root
+      group: root
+      mode: 0440
